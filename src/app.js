@@ -18,7 +18,7 @@ app.use(morgan("dev"));
 app.use(cors());
 
 // routes
-app.use("/", routes)
+app.use("/api", routes)
 
 app.get("/", (req, res) => {
     res.status(200).json({

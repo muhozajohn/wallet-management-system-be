@@ -35,6 +35,7 @@ model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   email     String   @unique
+  avatar    String?
   password  String
   fullName  String
   createdAt DateTime @default(now())
