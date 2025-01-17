@@ -53,7 +53,7 @@ model User {
 model Account {
   id             Int         @id @default(autoincrement())
   userId         Int
-  accountNumber  Int         @unique
+  accountNumber  Int         
   name           String
   type           AccountType
   currentBalance Decimal     @default(0.00) @db.Decimal(10, 2)
