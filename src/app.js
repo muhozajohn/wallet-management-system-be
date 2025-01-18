@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 import cors from "cors";
 import { connectToDatabase } from "./config/Dbconnection.js";
 
@@ -12,8 +13,8 @@ const app = express();
 dotenv.config();
 
 
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(cors());
 
