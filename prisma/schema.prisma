@@ -46,14 +46,12 @@ model User {
   categories   Category[]
   transactions Transaction[]
   budgets      Budget[]
-
-  @@map("users")
 }
 
 model Account {
   id             Int         @id @default(autoincrement())
   userId         Int
-  accountNumber  Int         
+  accountNumber  Int
   name           String
   type           AccountType
   currentBalance Decimal     @default(0.00) @db.Decimal(10, 2)
@@ -64,9 +62,6 @@ model Account {
   // Relations
   user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[]
-
-  @@index([userId])
-  @@map("accounts")
 }
 
 model Category {
@@ -82,10 +77,6 @@ model Category {
   subCategories    SubCategory[]
   transactions     Transaction[]
   budgetCategories BudgetCategory[]
-
-  @@unique([userId, name])
-  @@index([userId])
-  @@map("categories")
 }
 
 model SubCategory {
@@ -98,10 +89,6 @@ model SubCategory {
   // Relations
   category     Category      @relation(fields: [categoryId], references: [id])
   transactions Transaction[]
-
-  @@unique([categoryId, name])
-  @@index([categoryId])
-  @@map("sub_categories")
 }
 
 model Transaction {
@@ -113,7 +100,7 @@ model Transaction {
   amount          Decimal           @default(0.00) @db.Decimal(10, 2)
   type            TransactionType
   description     String?
-  transactionDate DateTime
+  transactionDate DateTime          @default(now())
   status          TransactionStatus @default(PENDING)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -123,12 +110,6 @@ model Transaction {
   account     Account      @relation(fields: [accountId], references: [id])
   category    Category     @relation(fields: [categoryId], references: [id])
   subCategory SubCategory? @relation(fields: [subCategoryId], references: [id])
-
-  @@index([userId])
-  @@index([accountId])
-  @@index([categoryId])
-  @@index([transactionDate])
-  @@map("transactions")
 }
 
 model Budget {
@@ -145,11 +126,6 @@ model Budget {
   // Relations
   user             User             @relation(fields: [userId], references: [id])
   budgetCategories BudgetCategory[]
-
-  @@unique([userId, name])
-  @@index([userId])
-  @@index([startDate, endDate])
-  @@map("budgets")
 }
 
 model BudgetCategory {
@@ -164,9 +140,4 @@ model BudgetCategory {
   // Relations
   budget   Budget   @relation(fields: [budgetId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
-
-  @@unique([budgetId, categoryId])
-  @@index([budgetId])
-  @@index([categoryId])
-  @@map("budget_categories")
 }
