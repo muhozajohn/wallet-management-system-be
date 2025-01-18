@@ -16,7 +16,7 @@ routes.use("/category",authMiddleware,categoryRoute);
 routes.use("/subcategory",sub_categoryRoute);
 routes.use("/transaction",authMiddleware,transactionRoute);
 routes.use("/account",authMiddleware,accountRoute);
-routes.use("/budget",budgetRoute);
+routes.use("/budget",authMiddleware,budgetRoute);
 routes.use("/budget/category",budget_categoryRoute);
 
 export default routes

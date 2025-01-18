@@ -1,4 +1,4 @@
-import { TransactionType, TransactionStatus, PrismaClient } from '@prisma/client';
+import { TransactionStatus, TransactionType, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const createTransaction = async (userId, transactionData) => {
@@ -33,36 +33,70 @@ export const createTransaction = async (userId, transactionData) => {
             return { success: false, message: "Category not found or unauthorized" };
         }
 
-        // Verify subCategory if provided
-        // if (transactionData.subCategoryId) {
-        //     const subCategory = await prisma.subCategory.findFirst({
-        //         where: {
-        //             id: parseInt(transactionData.subCategoryId),
-        //             categoryId: category.id
-        //         }
-        //     });
+        // Convert amount to number if it's a string
+        const amount = typeof transactionData.amount === 'string' 
+            ? parseFloat(transactionData.amount) 
+            : transactionData.amount;
 
-        //     if (!subCategory) {
-        //         return { success: false, message: "SubCategory not found or invalid" };
-        //     }
-        // }
+        // Calculate new balance based on transaction type
+        let newBalance = Number(account.currentBalance);
+        const transactionType = transactionData.type || TransactionType.EXPENSE;
 
-        const newTransaction = await prisma.transaction.create({
-            data: {
-                ...transactionData,
-                userId: id,
-                status:transactionData.status || TransactionStatus.PENDING,
-                type:transactionData.type || TransactionType.EXPENSE,
-                amount: typeof transactionData.amount === 'string' ? parseFloat(transactionData.amount) : transactionData.amount
-            },
-            include: {
-                account: true,
-                category: true,
-                subCategory: true
+        if (transactionType === TransactionType.INCOME) {
+            newBalance += amount;
+        } else if (transactionType === TransactionType.EXPENSE) {
+            // Check if there's enough balance for expense
+            if (newBalance < amount) {
+                return { 
+                    success: false, 
+                    message: "Insufficient balance for this transaction" 
+                };
             }
+            newBalance -= amount;
+        }
+
+        // Use transaction to ensure both operations succeed or fail together
+        const result = await prisma.$transaction(async (prisma) => {
+            // Create the transaction
+            const newTransaction = await prisma.transaction.create({
+                data: {
+                    ...transactionData,
+                    userId: id,
+                    status: transactionData.status || TransactionStatus.PENDING,
+                    type: transactionType,
+                    amount: amount
+                },
+                include: {
+                    account: true,
+                    category: true,
+                    subCategory: true
+                }
+            });
+
+            // Update account balance
+            const updatedAccount = await prisma.account.update({
+                where: { id: parseInt(transactionData.accountId) },
+                data: { 
+                    currentBalance: newBalance,
+                    updatedAt: new Date()
+                }
+            });
+
+            return { 
+                transaction: newTransaction, 
+                account: updatedAccount 
+            };
         });
-        
-        return { success: true, message: "Transaction created successfully", data: newTransaction };
+
+        return { 
+            success: true, 
+            message: "Transaction created successfully", 
+            data: {
+                ...result.transaction,
+                account: result.account
+            }
+        };
+
     } catch (error) {
         console.error("Service Error:", error);
         return { success: false, message: error.message };

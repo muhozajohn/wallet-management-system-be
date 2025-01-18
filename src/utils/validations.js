@@ -88,10 +88,23 @@ const transactionSchema = Joi.object({
     amount: Joi.number().precision(2).required(),
     type: Joi.string().valid('EXPENSE', 'INCOME').required(),
     description: Joi.string().optional().allow(''),
-    transactionDate: Joi.date().required(),
+    // transactionDate: Joi.date().required(),
     status: Joi.string().valid('PENDING', 'COMPLETED', 'CANCELLED').default('PENDING')
 });
 
 export const validateTransaction = (transactionData) => {
     return transactionSchema.validate(transactionData);
+};
+
+
+const budgetSchema = Joi.object({
+    name: Joi.string().required().min(3).max(50),
+    amount: Joi.number().precision(2).required(),
+    startDate: Joi.date().required(),
+    endDate: Joi.date().required().min(Joi.ref('startDate')),
+    currency: Joi.string().required().length(3)
+});
+
+export const validateBudget = (budgetData) => {
+    return budgetSchema.validate(budgetData);
 };
