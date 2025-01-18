@@ -167,3 +167,78 @@ export const deleteAccount = async (req, res) => {
         });
     }
 };
+
+
+
+// Get total balances for all account types
+export const getAccountTypeBalances = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const result = await AccountService.getUserAccountTypeBalances(userId);
+
+        if (result.success) {
+            return res.status(200).json({
+                status: "200",
+                message: "Account balances retrieved successfully",
+                data: result.data
+            });
+        } else {
+            return res.status(400).json({
+                status: "400",
+                message: result.message
+            });
+        }
+    } catch (error) {
+        console.log("Controller Error:", error);
+        return res.status(500).json({
+            status: "500",
+            message: "Failed to retrieve account balances",
+            error: error.message
+        });
+    }
+};
+
+// Get accounts and total balance for specific type
+export const getAccountsByType = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { type } = req.params;
+
+        // Validate account type
+        if (!Object.values(AccountService.AccountType).includes(type)) {
+            return res.status(400).json({
+                status: "400",
+                message: "Invalid account type"
+            });
+        }
+
+        const result = await AccountService.getAccountsByType(userId, type);
+
+        if (result.success) {
+            if (result.data.accounts.length === 0) {
+                return res.status(404).json({
+                    status: "404",
+                    message: `No accounts found for type: ${type}`
+                });
+            }
+
+            return res.status(200).json({
+                status: "200",
+                message: `${type} accounts retrieved successfully`,
+                data: result.data
+            });
+        } else {
+            return res.status(400).json({
+                status: "400",
+                message: result.message
+            });
+        }
+    } catch (error) {
+        console.log("Controller Error:", error);
+        return res.status(500).json({
+            status: "500",
+            message: "Failed to retrieve accounts by type",
+            error: error.message
+        });
+    }
+};

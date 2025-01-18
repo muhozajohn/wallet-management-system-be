@@ -9,22 +9,10 @@ export const createAccount = async (userId, accountData) => {
             return { success: false, message: "Invalid user ID format" };
         }
 
-    
-       // Check if the user already has an account
-       const existingAccount = await prisma.account.findFirst({
-        where: { userId: id },
-    });
+        // Generate a new account number
+        const acc = Math.floor(10000 + Math.random() * 90000);
         
-        let acc;
-
-        if (existingAccount) {
-            // If an account exists, reuse its accountNumber
-            acc = existingAccount.accountNumber;
-        } else {
-            // Generate a new account number if no account exists
-            acc = Math.floor(10000 + Math.random() * 90000);
-        }
-           const newAccount = await prisma.account.create({
+        const newAccount = await prisma.account.create({
             data: {
                 ...accountData,
                 userId: id,
@@ -34,6 +22,98 @@ export const createAccount = async (userId, accountData) => {
         });
         return { success: true, message: "Account created successfully", data: newAccount };
         
+    } catch (error) {
+        console.error("Service Error:", error);
+        return { success: false, message: error.message };
+    }
+};
+
+// Get total balance by account type for a specific user
+export const getUserAccountTypeBalances = async (userId) => {
+    try {
+        const id = parseInt(userId);
+        if (isNaN(id)) {
+            return { success: false, message: "Invalid user ID format" };
+        }
+
+        const balances = await prisma.account.groupBy({
+            by: ['type'],
+            where: {
+                userId: id
+            },
+            _sum: {
+                currentBalance: true
+            }
+        });
+
+        // Transform the result into a more readable format with proper numeric handling
+        const formattedBalances = balances.reduce((acc, balance) => {
+            // Convert to number to ensure proper numeric handling
+            const numericBalance = Number(balance._sum.currentBalance) || 0;
+            
+            acc[balance.type] = {
+                totalBalance: numericBalance,
+                formattedBalance: numericBalance.toFixed(2)
+            };
+            return acc;
+        }, {});
+
+        // Ensure all account types are represented
+        Object.values(AccountType).forEach(type => {
+            if (!formattedBalances[type]) {
+                formattedBalances[type] = {
+                    totalBalance: 0,
+                    formattedBalance: "0.00"
+                };
+            }
+        });
+
+        // Calculate total balance using proper numeric addition
+        const totalBalance = Object.values(formattedBalances)
+            .reduce((sum, { totalBalance }) => sum + Number(totalBalance), 0);
+
+        return { 
+            success: true, 
+            data: {
+                balances: formattedBalances,
+                summary: {
+                    totalAccounts: await prisma.account.count({ where: { userId: id } }),
+                    totalBalance: totalBalance,
+                    formattedTotalBalance: totalBalance.toFixed(2)
+                }
+            }
+        };
+    } catch (error) {
+        console.error("Service Error:", error);
+        return { success: false, message: error.message };
+    }
+};
+
+// Get accounts of specific type for a user
+export const getAccountsByType = async (userId, accountType) => {
+    try {
+        const accounts = await prisma.account.findMany({
+            where: { 
+                userId: parseInt(userId),
+                type: accountType
+            },
+            include: { transactions: true },
+            orderBy: { createdAt: 'desc' }
+        });
+        
+        const totalBalance = accounts.reduce(
+            (sum, account) => sum + Number(account.currentBalance), 
+            0
+        );
+
+        return { 
+            success: true, 
+            data: {
+                accounts,
+                totalBalance,
+                formattedTotalBalance: totalBalance.toFixed(2)
+            }
+        };
     } catch (error) {
         console.error("Service Error:", error);
         return { success: false, message: error.message };
