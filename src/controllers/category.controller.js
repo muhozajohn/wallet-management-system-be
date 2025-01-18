@@ -1,56 +1,56 @@
-import { validateAccount, validateAccountUpdate } from "../utils/validations.js";
-import * as AccountService from "../services/account.service.js";
+import { validateCategory } from "../utils/validations.js";
+import * as CategoryService from "../services/category.service.js";
 
-// Create account controller
-export const createAccount = async (req, res) => {
-    const { error, value } = validateAccount(req.body);
+// Create category controller
+export const createCategory = async (req, res) => {
+    const { error, value } = validateCategory(req.body);
 
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }
 
     try {
-        const userId = req.user.id
-        const accountResponse = await AccountService.createAccount(userId, value);
+        const userId = req.user.id;
+        const categoryResponse = await CategoryService.createCategory(userId, value);
 
-        if (accountResponse.success) {
+        if (categoryResponse.success) {
             return res.status(201).json({
                 status: "201",
-                message: accountResponse.message,
-                data: accountResponse.data,
+                message: categoryResponse.message,
+                data: categoryResponse.data,
             });
         } else {
             return res.status(400).json({
                 status: "400",
-                message: accountResponse.message,
+                message: categoryResponse.message,
             });
         }
     } catch (error) {
         console.log("Controller Error:", error);
         return res.status(500).json({
             status: "500",
-            message: "Failed to Create Account",
+            message: "Failed to Create Category",
             error: error.message,
         });
     }
 };
 
-// Get all accounts
-export const getAllAccounts = async (req, res) => {
+// Get all categories
+export const getAllCategories = async (req, res) => {
     try {
-        const userId = req.user.id
-        const result = await AccountService.getAccounts(userId);
+        const userId = req.user.id;
+        const result = await CategoryService.getCategories(userId);
 
         if (result.success && result.data.length > 0) {
             return res.status(200).json({
                 status: "200",
-                message: "Accounts retrieved successfully",
+                message: "Categories retrieved successfully",
                 data: result.data,
             });
         } else if (result.success && result.data.length === 0) {
             return res.status(404).json({
                 status: "404",
-                message: "No accounts found",
+                message: "No categories found",
             });
         } else {
             return res.status(500).json({
@@ -62,24 +62,24 @@ export const getAllAccounts = async (req, res) => {
         console.log("Controller Error:", error);
         return res.status(500).json({
             status: "500",
-            message: "Failed to retrieve accounts",
+            message: "Failed to retrieve categories",
             error: error.message,
         });
     }
 };
 
-// Get account by ID
-export const getAccountById = async (req, res) => {
+// Get category by ID
+export const getCategoryById = async (req, res) => {
     const { id } = req.params;
-    const userId = req.user.id
+    const userId = req.user.id;
 
     try {
-        const result = await AccountService.getAccountById(id, userId);
+        const result = await CategoryService.getCategoryById(id, userId);
 
         if (result.success && result.data) {
             return res.status(200).json({
                 status: "200",
-                message: "Account retrieved successfully",
+                message: "Category retrieved successfully",
                 data: result.data,
             });
         } else if (result.success && !result.data) {
@@ -97,55 +97,54 @@ export const getAccountById = async (req, res) => {
         console.log("Controller Error:", error);
         return res.status(500).json({
             status: "500",
-            message: "Failed to retrieve account",
+            message: "Failed to retrieve category",
             error: error.message,
         });
     }
 };
 
-// Update account
-export const updateAccount = async (req, res) => {
+// Update category
+export const updateCategory = async (req, res) => {
     const { id } = req.params;
-    const { error, value } = validateAccountUpdate(req.body);
+    const { error, value } = validateCategory(req.body);
 
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }
 
     try {
-        const userId = req.user.id
-        const accountResponse = await AccountService.updateAccount(id, userId, value);
+        const userId = req.user.id;
+        const categoryResponse = await CategoryService.updateCategory(id, userId, value);
 
-        if (accountResponse.success) {
+        if (categoryResponse.success) {
             return res.status(200).json({
                 status: "200",
-                message: accountResponse.message,
-                data: accountResponse.data,
+                message: categoryResponse.message,
+                data: categoryResponse.data,
             });
         } else {
             return res.status(400).json({
                 status: "400",
-                message: accountResponse.message,
+                message: categoryResponse.message,
             });
         }
     } catch (error) {
         console.log("Controller Error:", error);
         return res.status(500).json({
             status: "500",
-            message: "Failed to update account",
+            message: "Failed to update category",
             error: error.message,
         });
     }
 };
 
-// Delete account
-export const deleteAccount = async (req, res) => {
+// Delete category
+export const deleteCategory = async (req, res) => {
     const { id } = req.params;
-    const userId = req.user.id
-
+    const userId = req.user.id;
 
     try {
-        const result = await AccountService.deleteAccount(id, userId);
+        const result = await CategoryService.deleteCategory(id, userId);
 
         if (result.success) {
             return res.status(200).json({
@@ -162,7 +161,7 @@ export const deleteAccount = async (req, res) => {
         console.log("Controller Error:", error);
         return res.status(500).json({
             status: "500",
-            message: "Failed to delete account",
+            message: "Failed to delete category",
             error: error.message,
         });
     }

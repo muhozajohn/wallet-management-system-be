@@ -12,9 +12,9 @@ import authMiddleware from '../middlewares/auth.js';
 const routes = express.Router();
 
 routes.use("/users",userRoute);
-routes.use("/category",categoryRoute);
+routes.use("/category",authMiddleware,categoryRoute);
 routes.use("/subcategory",sub_categoryRoute);
-routes.use("/transaction",transactionRoute);
+routes.use("/transaction",authMiddleware,transactionRoute);
 routes.use("/account",authMiddleware,accountRoute);
 routes.use("/budget",budgetRoute);
 routes.use("/budget/category",budget_categoryRoute);

@@ -69,3 +69,29 @@ const accountBalanceSchema = Joi.object({
 export const validateAccountBalance = (balanceData) => {
     return accountBalanceSchema.validate(balanceData);
 };
+
+
+// Schema for account creation
+const categorySchema = Joi.object({
+    name: Joi.string().required().min(3).max(50),
+    type: Joi.string().valid('EXPENSE', 'INCOME').required()
+});
+
+export const validateCategory = (categoryData) => {
+    return categorySchema.validate(categoryData);
+};
+// Schema for transaction creation
+const transactionSchema = Joi.object({
+    accountId: Joi.number().required(),
+    categoryId: Joi.number().required(),
+    subCategoryId: Joi.number().optional().allow(null),
+    amount: Joi.number().precision(2).required(),
+    type: Joi.string().valid('EXPENSE', 'INCOME').required(),
+    description: Joi.string().optional().allow(''),
+    transactionDate: Joi.date().required(),
+    status: Joi.string().valid('PENDING', 'COMPLETED', 'CANCELLED').default('PENDING')
+});
+
+export const validateTransaction = (transactionData) => {
+    return transactionSchema.validate(transactionData);
+};
