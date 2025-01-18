@@ -1,5 +1,5 @@
-import { validateUser, validateUserLogin, validateUserLoginByUsername } from "../utils/validations.js";
-import * as UserService from "../services/users.service.js";
+import { validateUser, validateUserLogin, validateUserLoginByUsername } from "../utils/validations";
+import * as UserService from "../services/users.service";
 
 // createUser controller
 export const createUser = async (req, res) => {

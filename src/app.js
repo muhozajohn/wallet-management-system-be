@@ -3,10 +3,10 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { connectToDatabase } from "./config/Dbconnection.js";
+import { connectToDatabase } from "./config/Dbconnection";
 
 // routes
-import routes from "./routes/index.js";
+import routes from "./routes/index";
 
 
 const app = express();

@@ -1,6 +1,6 @@
 import express from 'express';
-import { createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from '../controllers/category.controller.js';
-import fileUpload from '../utils/multer.js';
+import { createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from '../controllers/category.controller';
+import fileUpload from '../utils/multer';
 
 
 const categoryRoute = express.Router();

@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "A wallet management system for tracking transactions, generating reports, setting budgets, and visualizing financial data for multiple accounts.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "npm run build && node ./build/src/app.js",
     "start:dev": "nodemon --exec babel-node ./src/app.js",
     "clean": "rm -rf build && mkdir build",
-    "build-babel": "babel -d ./build/src/ ./src/ -s",
+    "build-babel": "npx prisma generate && babel -d ./build/src/ ./src/ -s",
     "build": "npm run build-babel"
   },
   "author": "John Muhoza",

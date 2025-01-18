@@ -1,5 +1,5 @@
-import { validateBudget} from "../utils/validations.js";
-import * as BudgetService from "../services/budget.service.js";
+import { validateBudget} from "../utils/validations";
+import * as BudgetService from "../services/budget.service";
 
 // Create budget controller
 export const createBudget = async (req, res) => {

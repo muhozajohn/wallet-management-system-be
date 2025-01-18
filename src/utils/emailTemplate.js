@@ -1,4 +1,4 @@
-import sendMail from "./sendEmail.js";
+import sendMail from "./sendEmail";
 export const sendBudgetAlertEmail = (email, name, budgetDetails) => {
   const {
     budgetName,

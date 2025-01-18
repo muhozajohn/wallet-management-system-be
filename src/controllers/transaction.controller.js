@@ -1,5 +1,5 @@
-import { validateTransaction } from "../utils/validations.js";
-import * as TransactionService from "../services/transaction.service.js";
+import { validateTransaction } from "../utils/validations";
+import * as TransactionService from "../services/transaction.service";
 
 // Create transaction controller
 export const createTransaction = async (req, res) => {

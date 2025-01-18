@@ -1,5 +1,5 @@
-import { validateAccount, validateAccountUpdate } from "../utils/validations.js";
-import * as AccountService from "../services/account.service.js";
+import { validateAccount, validateAccountUpdate } from "../utils/validations";
+import * as AccountService from "../services/account.service";
 
 // Create account controller
 export const createAccount = async (req, res) => {

@@ -1,6 +1,6 @@
 import express from 'express';
-import { createTransaction, deleteTransaction, getAllTransactions, getTransactionById, updateTransaction } from '../controllers/transaction.controller.js';
-import fileUpload from '../utils/multer.js';
+import { createTransaction, deleteTransaction, getAllTransactions, getTransactionById, updateTransaction } from '../controllers/transaction.controller';
+import fileUpload from '../utils/multer';
 
 
 const transactionRoute = express.Router();

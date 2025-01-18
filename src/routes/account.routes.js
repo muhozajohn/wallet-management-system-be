@@ -1,6 +1,6 @@
 import express from 'express';
-import { createAccount, deleteAccount, getAccountById, getAccountsByType, getAccountTypeBalances, getAllAccounts, updateAccount } from '../controllers/account.controller.js';
-import fileUpload from '../utils/multer.js';
+import { createAccount, deleteAccount, getAccountById, getAccountsByType, getAccountTypeBalances, getAllAccounts, updateAccount } from '../controllers/account.controller';
+import fileUpload from '../utils/multer';
 
 
 const accountRoute = express.Router();

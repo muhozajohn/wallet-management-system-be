@@ -1,5 +1,5 @@
-import { validateCategory } from "../utils/validations.js";
-import * as CategoryService from "../services/category.service.js";
+import { validateCategory } from "../utils/validations";
+import * as CategoryService from "../services/category.service";
 
 // Create category controller
 export const createCategory = async (req, res) => {

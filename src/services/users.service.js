@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from "bcrypt";
-import { uploadToCloud } from "../utils/cloudinary.js";
-import generateToken from "../utils/generateToken.js";
+import { uploadToCloud } from "../utils/cloudinary";
+import generateToken from "../utils/generateToken";
 
 const prisma = new PrismaClient();
 

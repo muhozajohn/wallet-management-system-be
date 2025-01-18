@@ -1,6 +1,6 @@
 import express from 'express';
-import fileUpload from '../utils/multer.js';
-import { createBudget, deleteBudget, getAllBudgets, getBudgetById, updateBudget } from '../controllers/budget.controller.js';
+import fileUpload from '../utils/multer';
+import { createBudget, deleteBudget, getAllBudgets, getBudgetById, updateBudget } from '../controllers/budget.controller';
 
 const budgetRoute = express.Router();
 
