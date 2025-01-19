@@ -196,7 +196,8 @@ export const deleteAccount = async (accountId, userId) => {
         }
 
         await prisma.account.delete({
-            where: { id: parseInt(accountId) }
+            where: { id: parseInt(accountId) },
+            include:{transactions: true}
         });
 
         return { success: true, message: "Account deleted successfully" };

@@ -1,4 +1,4 @@
-import { validateAccount, validateAccountUpdate } from "../utils/validations";
+import { validateAccount } from "../utils/validations";
 import * as AccountService from "../services/account.service";
 
 // Create account controller
@@ -106,7 +106,7 @@ export const getAccountById = async (req, res) => {
 // Update account
 export const updateAccount = async (req, res) => {
     const { id } = req.params;
-    const { error, value } = validateAccountUpdate(req.body);
+    const { error, value } = validateAccount(req.body);
 
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
