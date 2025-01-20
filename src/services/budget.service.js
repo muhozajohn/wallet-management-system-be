@@ -21,7 +21,7 @@ export const createBudget = async (userId, budgetData) => {
                 endDate: new Date(budgetData.endDate)
             },
             include: {
-                budgetCategories: true
+                budgetCategories: true,
             }
         });
         

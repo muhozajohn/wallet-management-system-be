@@ -108,3 +108,26 @@ const budgetSchema = Joi.object({
 export const validateBudget = (budgetData) => {
     return budgetSchema.validate(budgetData);
 };
+
+
+
+const subCategorySchema = Joi.object({
+    name: Joi.string().required().min(3).max(50),
+    categoryId: Joi.number().integer().required(),
+  });
+  
+  export const validateSubCategory = (subCategoryData) => {
+    return subCategorySchema.validate(subCategoryData);
+  };
+
+
+const budgetCategorySchema = Joi.object({
+  budgetId: Joi.number().integer().required(),
+  categoryId: Joi.number().integer().required(),
+  allocatedAmount: Joi.number().precision(2).min(0).required(),
+  spentAmount: Joi.number().precision(2).min(0).required(),
+});
+
+export const validateBudgetCategory = (budgetCategoryData) => {
+  return budgetCategorySchema.validate(budgetCategoryData);
+};
