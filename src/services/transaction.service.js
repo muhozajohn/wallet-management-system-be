@@ -62,7 +62,7 @@ export const createTransaction = async (userId, transactionData) => {
                 data: {
                     ...transactionData,
                     userId: id,
-                    status: transactionData.status || TransactionStatus.PENDING,
+                    status: transactionData.status || TransactionStatus.COMPLETED,
                     type: transactionType,
                     amount: amount
                 },

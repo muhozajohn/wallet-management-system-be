@@ -14,4 +14,4 @@ accountRoute.put("/:id",fileUpload.single("files"),updateAccount)
 accountRoute.patch("/:id",fileUpload.single("files"),updateAccount)
 accountRoute.delete("/:id",deleteAccount)
 
-export default accountRoute
+export default accountRoute;
